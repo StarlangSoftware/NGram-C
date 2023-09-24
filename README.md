@@ -22,16 +22,16 @@ Video Lectures
 
 For Developers
 ============
-You can also see [Java](https://github.com/starlangsoftware/NGram), [Python](https://github.com/starlangsoftware/NGram-Py), [Cython](https://github.com/starlangsoftware/NGram-Cy), [Swift](https://github.com/starlangsoftware/NGram-Swift), [Js](https://github.com/starlangsoftware/NGram-Js), or [C#](https://github.com/starlangsoftware/NGram-CS) repository.
+You can also see [Java](https://github.com/starlangsoftware/NGram), [Python](https://github.com/starlangsoftware/NGram-Py), [Cython](https://github.com/starlangsoftware/NGram-Cy), [Swift](https://github.com/starlangsoftware/NGram-Swift), [Js](https://github.com/starlangsoftware/NGram-Js), [C](https://github.com/starlangsoftware/NGram-C), or [C#](https://github.com/starlangsoftware/NGram-CS) repository.
 
 ## Requirements
 
-* [C++ Compiler](#cpp)
+* [C Compiler](#c)
 * [Git](#git)
 
 
-### CPP
-To check if you have compatible C++ Compiler installed,
+### C
+To check if you have compatible C Compiler installed,
 * Open CLion IDE 
 * Preferences >Build,Execution,Deployment > Toolchain  
 
@@ -48,7 +48,7 @@ Use Git for cloning the code to your local or below line for Ubuntu:
 
 A directory called DataStructure will be created. Or you can use below link for exploring the code:
 
-	git clone https://github.com/starlangsoftware/NGram-CPP.git
+	git clone https://github.com/starlangsoftware/NGram-C.git
 
 ## Open project with CLion IDE
 

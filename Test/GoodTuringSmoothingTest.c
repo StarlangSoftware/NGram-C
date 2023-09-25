@@ -21,7 +21,7 @@ void test_perplexity_simple(){
     free_n_gram(simple_uni_gram);
     free_n_gram(simple_bi_gram);
     free_n_gram(simple_tri_gram);
-    free_array_list(simple_corpus, NULL);
+    free_2d_array_list(simple_corpus, NULL);
 }
 
 void test_calculate_probabilities_simple(){
@@ -53,7 +53,7 @@ void test_calculate_probabilities_simple(){
     free_n_gram(simple_uni_gram);
     free_n_gram(simple_bi_gram);
     free_n_gram(simple_tri_gram);
-    free_array_list(simple_corpus, NULL);
+    free_2d_array_list(simple_corpus, NULL);
 }
 
 int main(){

@@ -4,6 +4,7 @@
 
 #include <ArrayList.h>
 #include <math.h>
+#include <stdlib.h>
 #include "ReadCorpus.h"
 #include "../src/NoSmoothing.h"
 
@@ -21,7 +22,7 @@ void test_perplexity_simple(){
     free_n_gram(simple_uni_gram);
     free_n_gram(simple_bi_gram);
     free_n_gram(simple_tri_gram);
-    free_array_list(simple_corpus, NULL);
+    free_2d_array_list(simple_corpus, NULL);
 }
 
 void test_perplexity_complex(){
@@ -38,7 +39,7 @@ void test_perplexity_complex(){
     free_n_gram(complex_uni_gram);
     free_n_gram(complex_bi_gram);
     free_n_gram(complex_tri_gram);
-    free_array_list(train_corpus, NULL);
+    free_2d_array_list(train_corpus, free);
 }
 
 void test_calculate_probabilities_simple(){
@@ -70,7 +71,7 @@ void test_calculate_probabilities_simple(){
     free_n_gram(simple_uni_gram);
     free_n_gram(simple_bi_gram);
     free_n_gram(simple_tri_gram);
-    free_array_list(simple_corpus, NULL);
+    free_2d_array_list(simple_corpus, NULL);
 }
 
 void test_calculate_probabilities_complex() {
@@ -99,6 +100,7 @@ void test_calculate_probabilities_complex() {
     if (get_probability(complex_tri_gram, 3, "mustafa", "kemal", "atatürk") != 1.0 / 3.0){
         printf("Error in probability 6\n");
     }
+    free_2d_array_list(train_corpus, free);
 }
 
 int main(){

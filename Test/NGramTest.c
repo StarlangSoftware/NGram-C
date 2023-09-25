@@ -3,6 +3,7 @@
 //
 
 #include <ArrayList.h>
+#include <stdlib.h>
 #include "../src/NGram.h"
 #include "ReadCorpus.h"
 
@@ -28,7 +29,7 @@ void testGetCountSimple(){
     check_n_gram(simple_tri_gram, (char*[]){"ayşe", "kitabı", "at"}, 3, 0, 9);
     check_n_gram(simple_tri_gram, (char*[]){"mahmut", "evde", "kal"}, 3, 0, 10);
     check_n_gram(simple_tri_gram, (char*[]){"ali", "topu", "at"}, 3, 2, 11);
-    free_array_list(simple_corpus, NULL);
+    free_2d_array_list(simple_corpus, NULL);
     free_n_gram(simple_uni_gram);
     free_n_gram(simple_bi_gram);
     free_n_gram(simple_tri_gram);
@@ -40,7 +41,7 @@ void test_vocabulary_size_simple(){
     if (vocabulary_size(simple_uni_gram) != 15){
         printf("Error in vocabulary size\n");
     }
-    free_array_list(simple_corpus, NULL);
+    free_2d_array_list(simple_corpus, NULL);
     free_n_gram(simple_uni_gram);
 }
 
@@ -70,7 +71,7 @@ void test_prune(){
     check_n_gram(simple_bi_gram, (char*[]){"ali", "topu"}, 2, 3, 17);
     prune(simple_bi_gram, 0.9);
     check_n_gram(simple_bi_gram, (char*[]){"<s>", "ali"}, 2, 4, 18);
-    free_array_list(simple_corpus, NULL);
+    free_2d_array_list(simple_corpus, NULL);
     free_n_gram(simple_bi_gram);
 }
 
@@ -133,7 +134,7 @@ void test_get_count_complex() {
     check_n_gram(complex_bi_gram, (char*[]){"mustafa", "kemal"}, 2, 3, 4);
     check_n_gram(complex_tri_gram, (char*[]){"<s>", "mustafa", "kemal"}, 3, 1, 5);
     check_n_gram(complex_tri_gram, (char*[]){"mustafa", "kemal", "atatürk"}, 3, 1, 6);
-    free_array_list(train_corpus, NULL);
+    free_2d_array_list(train_corpus, free);
     free_n_gram(complex_uni_gram);
     free_n_gram(complex_bi_gram);
     free_n_gram(complex_tri_gram);
@@ -145,21 +146,21 @@ void test_vocabulary_size_complex() {
     if (vocabulary_size(complex_uni_gram1) != 57625){
         printf("Error in complex vocabulary size 1\n");
     }
-    free_array_list(train_corpus, NULL);
+    free_2d_array_list(train_corpus, free);
     free_n_gram(complex_uni_gram1);
     Array_list_ptr test_corpus = read_corpus("../test.txt");
     N_gram_ptr complex_uni_gram2 = create_string_n_gram(test_corpus, 1);
     if (vocabulary_size(complex_uni_gram2) != 55485){
         printf("Error in complex vocabulary size 2\n");
     }
-    free_array_list(test_corpus, NULL);
+    free_2d_array_list(test_corpus, free);
     free_n_gram(complex_uni_gram2);
     Array_list_ptr validation_corpus = read_corpus("../validation.txt");
     N_gram_ptr complex_uni_gram3 = create_string_n_gram(validation_corpus, 1);
     if (vocabulary_size(complex_uni_gram3) != 35663){
         printf("Error in complex vocabulary size 3\n");
     }
-    free_array_list(validation_corpus, NULL);
+    free_2d_array_list(validation_corpus, free);
     free_n_gram(complex_uni_gram3);
 }
 

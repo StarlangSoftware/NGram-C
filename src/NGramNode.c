@@ -81,9 +81,9 @@ N_gram_node_ptr create_n_gram_node3(bool is_root_node, Multiple_file_ptr multipl
                                     int (*key_compare)(const void *, const void *)) {
     N_gram_node_ptr result = create_n_gram_node(NULL, hash_function, key_compare);
     if (!is_root_node){
-        result->symbol = read_line(multiple_file);
+        result->symbol = left_trim(read_line(multiple_file));
     }
-    char* line = read_line(multiple_file);
+    char* line = left_trim(read_line(multiple_file));
     Array_list_ptr items = str_split(line, ' ');
     if (items->size != 4){
         printf("Error in line -> %s", line);

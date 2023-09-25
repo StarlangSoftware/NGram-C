@@ -9,15 +9,11 @@
 
 void check_n_gram(N_gram_ptr n_gram, char** s1, int length, int count, int index){
     if (get_count(n_gram, (void **) s1, length) != count){
-        printf("Error in ngram %d\n", index);
+        printf("Error in ngram %d: value %d\n", index, get_count(n_gram, (void **) s1, length));
     }
 }
 
-void testGetCountSimple(){
-    Array_list_ptr simple_corpus = create_simple_corpus();
-    N_gram_ptr simple_uni_gram = create_string_n_gram(simple_corpus, 1);
-    N_gram_ptr simple_bi_gram = create_string_n_gram(simple_corpus, 2);
-    N_gram_ptr simple_tri_gram = create_string_n_gram(simple_corpus, 3);
+void test_counts(N_gram_ptr simple_uni_gram, N_gram_ptr simple_bi_gram, N_gram_ptr simple_tri_gram){
     check_n_gram(simple_uni_gram, (char*[]){"<s>"}, 1, 5, 1);
     check_n_gram(simple_uni_gram, (char*[]){"mahmut"}, 1, 0, 2);
     check_n_gram(simple_uni_gram, (char*[]){"kitabı"}, 1, 1, 3);
@@ -29,6 +25,14 @@ void testGetCountSimple(){
     check_n_gram(simple_tri_gram, (char*[]){"ayşe", "kitabı", "at"}, 3, 0, 9);
     check_n_gram(simple_tri_gram, (char*[]){"mahmut", "evde", "kal"}, 3, 0, 10);
     check_n_gram(simple_tri_gram, (char*[]){"ali", "topu", "at"}, 3, 2, 11);
+}
+
+void test_get_count_simple(){
+    Array_list_ptr simple_corpus = create_simple_corpus();
+    N_gram_ptr simple_uni_gram = create_string_n_gram(simple_corpus, 1);
+    N_gram_ptr simple_bi_gram = create_string_n_gram(simple_corpus, 2);
+    N_gram_ptr simple_tri_gram = create_string_n_gram(simple_corpus, 3);
+    test_counts(simple_uni_gram, simple_bi_gram, simple_tri_gram);
     free_2d_array_list(simple_corpus, NULL);
     free_n_gram(simple_uni_gram);
     free_n_gram(simple_bi_gram);
@@ -164,8 +168,22 @@ void test_vocabulary_size_complex() {
     free_n_gram(complex_uni_gram3);
 }
 
+void test_load_multi_part(){
+    N_gram_ptr simple_uni_gram = create_string_n_gram5(2, "../simple1part1.txt", "../simple1part2.txt");
+    N_gram_ptr simple_bi_gram = create_string_n_gram5(3, "../simple2part1.txt", "../simple2part2.txt", "../simple2part3.txt");
+    N_gram_ptr simple_tri_gram = create_string_n_gram5(4, "../simple3part1.txt", "../simple3part2.txt", "../simple3part3.txt", "../simple3part4.txt");
+    if (vocabulary_size(simple_uni_gram) != 15){
+        printf("Error in vocabulary size\n");
+    }
+    test_counts(simple_uni_gram, simple_bi_gram, simple_tri_gram);
+    free_n_gram(simple_uni_gram);
+    free_n_gram(simple_bi_gram);
+    free_n_gram(simple_tri_gram);
+}
+
 int main(){
-    testGetCountSimple();
+    test_load_multi_part();
+    test_get_count_simple();
     test_vocabulary_size_simple();
     test_prune();
     test_load_n_gram();

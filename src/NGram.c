@@ -496,3 +496,17 @@ N_gram_ptr create_string_n_gram4(FILE *input_file) {
     return create_n_gram4(input_file, (unsigned int (*)(const void *, int)) hash_function_string,
                           (int (*)(const void *, const void *)) compare_string);
 }
+
+N_gram_ptr create_string_n_gram5(int num, ...) {
+    N_gram_ptr result = malloc(sizeof(N_gram));
+    result->vocabulary = create_hash_set((unsigned int (*)(const void *, int)) hash_function_string, (int (*)(const void *, const void *)) compare_string);
+    va_list valist;
+    va_start(valist, num);
+    Multiple_file_ptr multiple_file = create_multiple_file2(num, valist);
+    va_end(valist);
+    load_n_gram(result, multiple_file->reader);
+    result->root_node = create_n_gram_node3(true, multiple_file, (unsigned int (*)(const void *, int)) hash_function_string, (int (*)(const void *, const void *)) compare_string);
+    multiple_file_close(multiple_file);
+    free_multiple_file(multiple_file);
+    return result;
+}

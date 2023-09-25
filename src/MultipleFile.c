@@ -58,3 +58,16 @@ void free_multiple_file(Multiple_file_ptr multiple_file) {
     }
     free(multiple_file->file_name_list);
 }
+
+Multiple_file_ptr create_multiple_file2(int num, va_list valist) {
+    Multiple_file_ptr result = malloc(sizeof(Multiple_file));
+    result->index = 0;
+    result->count = num;
+    result->file_name_list = malloc(num * sizeof(char*));
+    for (int i = 0; i < num; i++){
+        char* tmp = va_arg(valist, char*);
+        result->file_name_list[i] = str_copy(result->file_name_list[i], tmp);
+    }
+    result->reader = fopen(result->file_name_list[0], "r");
+    return result;
+}

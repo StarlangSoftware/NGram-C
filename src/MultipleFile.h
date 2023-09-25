@@ -20,6 +20,8 @@ typedef Multiple_file *Multiple_file_ptr;
 
 Multiple_file_ptr create_multiple_file(int num, ...);
 
+Multiple_file_ptr create_multiple_file2(int num, va_list list);
+
 void free_multiple_file(Multiple_file_ptr multiple_file);
 
 void multiple_file_close(Multiple_file_ptr multiple_file);

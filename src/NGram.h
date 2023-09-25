@@ -51,6 +51,8 @@ N_gram_ptr create_n_gram5(unsigned int (*hash_function)(const void *, int),
                           int num,
                           ...);
 
+N_gram_ptr create_string_n_gram5(int num, ...);
+
 void free_n_gram(N_gram_ptr n_gram);
 
 void add_n_gram(N_gram_ptr n_gram,

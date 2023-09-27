@@ -1,7 +1,7 @@
 from conans import ConanFile, CMake, tools
 
 
-class DataStructureConan(ConanFile):
+class NGramConan(ConanFile):
     name = "NGram-C"
     version = "1.0.0"
     requires = ["Sampling-C/1.0.0", "Math-C/1.0.0"]

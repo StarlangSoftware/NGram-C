@@ -47,12 +47,8 @@ double *linear_regression_on_counts_of_counts(const int *counts_of_counts, int s
     double x_t, r_t;
     for (int i = 1; i < size; i++) {
         if (counts_of_counts[i] != 0) {
-            int* x = malloc(sizeof(int));
-            *x = i;
-            array_list_add(r, x);
-            int* y = malloc(sizeof(int));
-            *y = counts_of_counts[i];
-            array_list_add(c, y);
+            array_list_add_int(r, i);
+            array_list_add_int(c, counts_of_counts[i]);
         }
     }
     Matrix_ptr A = create_matrix(2, 2);

@@ -10,7 +10,7 @@
 #include "NGramNode.h"
 
 /**
- * Constructor of {@link NGramNode}
+ * Constructor of NGramNode
  *
  * @param symbol symbol to be kept in this node.
  */
@@ -33,7 +33,7 @@ void free_n_gram_node(N_gram_node_ptr n_gram_node) {
 }
 
 /**
- * Constructor of {@link NGramNode}
+ * Constructor of NGramNode
  *
  * @param is_root_node True if this node is root node, false otherwise.
  * @param input_file         File to be read.
@@ -71,7 +71,7 @@ N_gram_node_ptr create_n_gram_node2(bool is_root_node,
 }
 
 /**
- * Constructor of {@link NGramNode}
+ * Constructor of NGramNode
  *
  * @param is_root_node True if this node is root node, false otherwise.
  * @param multiple_file Multiple file structure to read the nGram.
@@ -110,7 +110,7 @@ create_n_gram_node4(unsigned int (*hash_function)(const void *, int), int (*key_
 
 /**
  * Gets the size of children of this node.
- * @return size of children of {@link NGramNode} this node.
+ * @return size of children of NGramNode this node.
  */
 int size_of_n_gram_node(const N_gram_node* n_gram_node) {
     return n_gram_node->children->count;

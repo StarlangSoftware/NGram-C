@@ -10,7 +10,7 @@
 #include "NGram.h"
 
 /**
- * Constructor of {@link NGram} class which takes a {@link vector<vector<Symbol>>} corpus and {@link Integer} size of ngram as input.
+ * Constructor of NGram class which takes a {@link vector<vector<Symbol>>} corpus and Integer size of ngram as input.
  * It adds all sentences of corpus as ngrams.
  *
  * @param corpus {@link vector<vector<Symbol>>} list of sentences whose ngrams are added.
@@ -36,7 +36,7 @@ void free_n_gram(N_gram_ptr n_gram) {
 }
 
 /**
- * Constructor of {@link NGram} class which takes {@link Integer} size of ngram.
+ * Constructor of NGram class which takes Integer size of ngram.
  *
  * @param N size of ngram.
  */
@@ -51,7 +51,7 @@ N_gram_ptr create_n_gram2(int N, unsigned int (*hash_function)(const void *, int
 }
 
 /**
- * Adds {@link Symbol*} given array of symbols to {@link unordered_set} the vocabulary and to {@link NGramNode} the rootNode
+ * Adds {@link Symbol*} given array of symbols to {@link unordered_set} the vocabulary and to NGramNode the rootNode
  *
  * @param symbols {@link Symbol*} ngram added.
  * @param size size of symbols.
@@ -64,7 +64,7 @@ void add_n_gram(N_gram_ptr n_gram, Array_list_ptr symbols, int size) {
 }
 
 /**
- * Adds given sentence count times to {@link unordered_set} the vocabulary and create and add ngrams of the sentence to {@link NGramNode} the rootNode
+ * Adds given sentence count times to {@link unordered_set} the vocabulary and create and add ngrams of the sentence to NGramNode the rootNode
  *
  * @param symbols {@link Symbol*} sentence whose ngrams are added.
  * @param size size of symbols.

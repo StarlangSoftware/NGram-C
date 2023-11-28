@@ -2,9 +2,9 @@
 // Created by Olcay Taner YILDIZ on 21.09.2023.
 //
 
-#include <stdlib.h>
 #include <Matrix.h>
 #include <math.h>
+#include <Memory/Memory.h>
 #include "GoodTuringSmoothing.h"
 
 /**
@@ -25,9 +25,9 @@ void set_probabilities_with_level_good_turing_smoothing(N_gram_ptr n_gram,
     for (int r = 1; r < size; r++){
         sum += countsOfCounts[r] * r;
     }
-    free(countsOfCounts);
+    free_(countsOfCounts);
     set_adjusted_probability(n_gram, N, level, N[1] / sum);
-    free(N);
+    free_(N);
 }
 
 /**
@@ -41,7 +41,7 @@ void set_probabilities_with_level_good_turing_smoothing(N_gram_ptr n_gram,
  */
 double *linear_regression_on_counts_of_counts(const int *counts_of_counts, int size) {
     int r_i_plus_1, r_i_minus_1;
-    double* N = malloc(sizeof(double) * size);
+    double* N = malloc_(sizeof(double) * size, "linear_regression_on_counts_of_counts");
     Array_list_ptr r = create_array_list();
     Array_list_ptr c = create_array_list();
     double x_t, r_t;
@@ -89,7 +89,7 @@ double *linear_regression_on_counts_of_counts(const int *counts_of_counts, int s
     for (int i = 1; i < size; i++){
         N[i] = exp(log(i) * w1 + w0);
     }
-    free_array_list(r, free);
-    free_array_list(c, free);
+    free_array_list(r, free_);
+    free_array_list(c, free_);
     return N;
 }

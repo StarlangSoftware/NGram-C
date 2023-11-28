@@ -4,6 +4,7 @@
 
 #include <ArrayList.h>
 #include <math.h>
+#include <Memory/Memory.h>
 #include "ReadCorpus.h"
 #include "../src/GoodTuringSmoothing.h"
 

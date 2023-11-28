@@ -3,7 +3,7 @@
 //
 
 #include <ArrayList.h>
-#include <stdlib.h>
+#include <Memory/Memory.h>
 #include "ReadCorpus.h"
 #include "../src/AdditiveSmoothing.h"
 
@@ -23,9 +23,9 @@ void test_perplexity_complex(){
     free_n_gram(complex_uni_gram);
     free_n_gram(complex_bi_gram);
     free_n_gram(complex_tri_gram);
-    free_2d_array_list(train_corpus, free);
-    free_2d_array_list(test_corpus, free);
-    free_2d_array_list(validation_corpus, free);
+    free_2d_array_list(train_corpus, free_);
+    free_2d_array_list(test_corpus, free_);
+    free_2d_array_list(validation_corpus, free_);
 }
 
 int main(){

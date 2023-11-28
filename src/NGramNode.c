@@ -6,8 +6,8 @@
 #include <FileUtils.h>
 #include <string.h>
 #include <StringUtils.h>
-#include <ctype.h>
 #include "NGramNode.h"
+#include "Memory/Memory.h"
 
 /**
  * Constructor of NGramNode
@@ -17,8 +17,12 @@
 N_gram_node_ptr create_n_gram_node(void *symbol,
                                    unsigned int (*hash_function)(const void *, int),
                                    int (*key_compare)(const void *, const void *)) {
-    N_gram_node_ptr result = malloc(sizeof(N_gram_node));
-    result->symbol = symbol;
+    N_gram_node_ptr result = malloc_(sizeof(N_gram_node), "create_n_gram_node");
+    if (symbol != NULL){
+        result->symbol = str_copy(result->symbol, symbol);
+    } else {
+        result->symbol = NULL;
+    }
     result->children = create_hash_map(hash_function, key_compare);
     result->count = 0;
     result->unknown = NULL;
@@ -29,7 +33,8 @@ N_gram_node_ptr create_n_gram_node(void *symbol,
 
 void free_n_gram_node(N_gram_node_ptr n_gram_node) {
     free_hash_map(n_gram_node->children, (void (*)(void *)) free_n_gram_node);
-    free(n_gram_node);
+    free_(n_gram_node->symbol);
+    free_(n_gram_node);
 }
 
 /**
@@ -60,13 +65,12 @@ N_gram_node_ptr create_n_gram_node2(bool is_root_node,
     result->probability_of_unseen = atof(array_list_get(items, 2));
     int number_of_children = atoi(array_list_get(items, 3));
     if (number_of_children > 0){
-        result->children = create_hash_map(hash_function, key_compare);
         for (int i = 0; i < number_of_children; i++){
             N_gram_node_ptr child_node = create_n_gram_node2(false, input_file, hash_function, key_compare);
             hash_map_insert(result->children, child_node->symbol, child_node);
         }
     }
-    free_array_list(items, free);
+    free_array_list(items, free_);
     return result;
 }
 
@@ -81,25 +85,28 @@ N_gram_node_ptr create_n_gram_node3(bool is_root_node, Multiple_file_ptr multipl
                                     int (*key_compare)(const void *, const void *)) {
     N_gram_node_ptr result = create_n_gram_node(NULL, hash_function, key_compare);
     if (!is_root_node){
-        result->symbol = left_trim(read_line(multiple_file));
+        char* line = read_line(multiple_file);
+        result->symbol = str_copy(result->symbol, left_trim(line));
+        free_(line);
     }
-    char* line = left_trim(read_line(multiple_file));
-    Array_list_ptr items = str_split(line, ' ');
+    char* line = read_line(multiple_file);
+    char* trimmed_line = left_trim(line);
+    Array_list_ptr items = str_split(trimmed_line, ' ');
     if (items->size != 4){
-        printf("Error in line -> %s", line);
+        printf("Error in line -> %s", trimmed_line);
     }
+    free_(line);
     result->count = atoi(array_list_get(items, 0));
     result->probability = atof(array_list_get(items, 1));
     result->probability_of_unseen = atof(array_list_get(items, 2));
     int number_of_children = atoi(array_list_get(items, 3));
     if (number_of_children > 0){
-        result->children = create_hash_map(hash_function, key_compare);
         for (int i = 0; i < number_of_children; i++){
             N_gram_node_ptr child_node = create_n_gram_node3(false, multiple_file, hash_function, key_compare);
             hash_map_insert(result->children, child_node->symbol, child_node);
         }
     }
-    free_array_list(items, free);
+    free_array_list(items, free_);
     return result;
 }
 
@@ -419,7 +426,6 @@ int get_count_node(const N_gram_node* n_gram_node, void **s, int length, int ind
 void prune_node(N_gram_node_ptr n_gram_node, double threshold, int N) {
     if (N == 0){
         void* maxElement = NULL;
-        N_gram_node_ptr maxNode = NULL;
         Array_list_ptr toBeDeleted = create_array_list();
         Array_list_ptr children = key_list(n_gram_node->children);
         for (int i = 0; i < children->size; i++){
@@ -430,18 +436,18 @@ void prune_node(N_gram_node_ptr n_gram_node, double threshold, int N) {
             }
             if (maxElement == NULL || node->count > ((N_gram_node_ptr) hash_map_get(n_gram_node->children, maxElement))->count){
                 maxElement = symbol;
-                maxNode = node;
             }
         }
         for (int i = 0; i < toBeDeleted->size; i++){
             void* symbol1 = array_list_get(toBeDeleted, i);
-            hash_map_remove(n_gram_node->children, symbol1, NULL);
+            if (symbol1 != maxElement){
+                N_gram_node_ptr deleted_node = hash_map_get(n_gram_node->children, symbol1);
+                hash_map_remove(n_gram_node->children, symbol1, free_);
+                free_n_gram_node(deleted_node);
+            }
         }
         free_array_list(children, NULL);
         free_array_list(toBeDeleted, NULL);
-        if (size_of_n_gram_node(n_gram_node) == 0){
-            hash_map_insert(n_gram_node->children, maxElement, maxNode);
-        }
     } else {
         Array_list_ptr children = value_list(n_gram_node->children);
         for (int i = 0; i < children->size; i++){

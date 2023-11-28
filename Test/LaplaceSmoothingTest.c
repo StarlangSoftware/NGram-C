@@ -3,6 +3,7 @@
 //
 
 #include <ArrayList.h>
+#include <Memory/Memory.h>
 #include "ReadCorpus.h"
 #include "../src/LaplaceSmoothing.h"
 

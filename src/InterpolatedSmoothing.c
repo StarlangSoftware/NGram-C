@@ -3,8 +3,8 @@
 //
 
 #include <float.h>
-#include <stdlib.h>
 #include <math.h>
+#include <Memory/Memory.h>
 #include "InterpolatedSmoothing.h"
 #include "TrainedSmoothing.h"
 #include "GoodTuringSmoothing.h"
@@ -22,7 +22,7 @@ double *learn_best_lambda(Array_list_ptr nGrams,
                           K_fold_cross_validation_ptr kFoldCrossValidation,
                           double lower_bound) {
     double best_perplexity, best_previous = -1, upper_bound = 0.999, perplexity;
-    double* best_lambda = malloc(sizeof(double));
+    double* best_lambda = malloc_(sizeof(double), "learn_best_lambda");
     *best_lambda = (lower_bound + upper_bound) / 2;
     int number_of_parts = 5;
     Array_list_ptr test_folds[10];
@@ -109,7 +109,7 @@ double *learn_best_lambdas(Array_list_ptr nGrams,
     for (int i = 0; i < 10; i++){
         free_array_list(test_folds[i], NULL);
     }
-    double* best_lambda = malloc(2 * sizeof(double));
+    double* best_lambda = malloc_(2 * sizeof(double), "learn_best_lambdas");
     best_lambda[0] = best_lambda1;
     best_lambda[1] = best_lambda2;
     return best_lambda;

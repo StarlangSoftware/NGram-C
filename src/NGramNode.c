@@ -386,7 +386,7 @@ void replace_unknown_words_node(N_gram_node_ptr n_gram_node, Hash_set_ptr dictio
             for (int i = 0; i < childList->size; i++){
                 N_gram_node_ptr child = array_list_get(childList, i);
                 if (size_of_n_gram_node(child) != 0){
-                    hash_map_merge(n_gram_node->unknown->children, child->children);
+                    hash_map_merge(n_gram_node->unknown->children, child->children, NULL, NULL);
                 }
                 sum += child->count;
                 hash_map_remove(n_gram_node->children, child->symbol, NULL);

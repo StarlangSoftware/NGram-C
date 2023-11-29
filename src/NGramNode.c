@@ -31,6 +31,29 @@ N_gram_node_ptr create_n_gram_node(void *symbol,
     return result;
 }
 
+N_gram_node_ptr clone_n_gram_node(const N_gram_node *n_gram_node) {
+    N_gram_node_ptr result = malloc_(sizeof(N_gram_node), "clone_n_gram_node");
+    if (n_gram_node->symbol != NULL){
+        result->symbol = str_copy(result->symbol, n_gram_node->symbol);
+    } else {
+        result->symbol = NULL;
+    }
+    result->children = create_hash_map((unsigned int (*)(const void *, int)) hash_function_string,
+                                       (int (*)(const void *, const void *)) compare_string);
+    Array_list_ptr list = key_list(n_gram_node->children);
+    for (int i = 0; i < list->size; i++){
+        void* symbol = array_list_get(list, i);
+        N_gram_node_ptr child = hash_map_get(n_gram_node->children, symbol);
+        hash_map_insert(result->children, symbol, clone_n_gram_node(child));
+    }
+    free_array_list(list, NULL);
+    result->count = n_gram_node->count;
+    result->unknown = NULL;
+    result->probability = n_gram_node->probability;
+    result->probability_of_unseen = n_gram_node->probability_of_unseen;
+    return result;
+}
+
 void free_n_gram_node(N_gram_node_ptr n_gram_node) {
     free_hash_map(n_gram_node->children, (void (*)(void *)) free_n_gram_node);
     free_(n_gram_node->symbol);
@@ -386,7 +409,10 @@ void replace_unknown_words_node(N_gram_node_ptr n_gram_node, Hash_set_ptr dictio
             for (int i = 0; i < childList->size; i++){
                 N_gram_node_ptr child = array_list_get(childList, i);
                 if (size_of_n_gram_node(child) != 0){
-                    hash_map_merge(n_gram_node->unknown->children, child->children, NULL, NULL);
+                    hash_map_merge(n_gram_node->unknown->children,
+                                   child->children,
+                                   (void *(*)(void *)) clone_string,
+                                   (void *(*)(void *)) clone_n_gram_node);
                 }
                 sum += child->count;
                 hash_map_remove(n_gram_node->children, child->symbol, NULL);
@@ -472,7 +498,7 @@ void merge_node(N_gram_node_ptr n_gram_node, const N_gram_node* toBeMerged) {
     for (int i = 0; i < children->size; i++){
         void* symbol = array_list_get(children, i);
         if (!hash_map_contains(n_gram_node->children, symbol)){
-            hash_map_insert(n_gram_node->children, symbol, (N_gram_node_ptr) hash_map_get(toBeMerged->children, symbol));
+            hash_map_insert(n_gram_node->children, symbol, clone_n_gram_node(hash_map_get(toBeMerged->children, symbol)));
         }
     }
     free_array_list(children, NULL);

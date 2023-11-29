@@ -104,6 +104,7 @@ void test_merge(){
     if (vocabulary_size(n_gram_1) != 18){
         printf("Error in merge 1 %d\n", vocabulary_size(n_gram_1));
     }
+    free_n_gram(n_gram_b);
     free_n_gram(n_gram_1);
     N_gram_ptr n_gram_2 = create_string_n_gram3("../simple2a.txt");
     n_gram_b = create_string_n_gram3("../simple2b.txt");
@@ -115,6 +116,9 @@ void test_merge(){
     if (vocabulary_size(n_gram_2) != 21){
         printf("Error in merge 2 %d\n", vocabulary_size(n_gram_2));
     }
+    free_n_gram(n_gram_b);
+    free_n_gram(n_gram_c);
+    free_n_gram(n_gram_d);
     free_n_gram(n_gram_2);
     N_gram_ptr n_gram_3 = create_string_n_gram3("../simple3a.txt");
     n_gram_b = create_string_n_gram3("../simple3b.txt");
@@ -124,6 +128,8 @@ void test_merge(){
     if (vocabulary_size(n_gram_3) != 20){
         printf("Error in merge 3 %d\n", vocabulary_size(n_gram_3));
     }
+    free_n_gram(n_gram_b);
+    free_n_gram(n_gram_c);
     free_n_gram(n_gram_3);
 }
 

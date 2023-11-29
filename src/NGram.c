@@ -461,7 +461,7 @@ void merge(N_gram_ptr n_gram, const N_gram* toBeMerged) {
     if (n_gram->N != toBeMerged->N){
         return;
     }
-    hash_set_merge(n_gram->vocabulary, toBeMerged->vocabulary, NULL);
+    hash_set_merge(n_gram->vocabulary, toBeMerged->vocabulary, (void *(*)(void *)) clone_string);
     merge_node(n_gram->root_node, toBeMerged->root_node);
 }
 

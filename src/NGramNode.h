@@ -86,4 +86,6 @@ void merge_node(N_gram_node_ptr n_gram_node, const N_gram_node* toBeMerged);
 
 void* generate_next_string(const N_gram_node* n_gram_node, Array_list_ptr s, int index);
 
+N_gram_node_ptr clone_n_gram_node(const N_gram_node* n_gram_node);
+
 #endif //NGRAM_NGRAMNODE_H

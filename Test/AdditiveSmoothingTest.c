@@ -8,9 +8,9 @@
 #include "../src/AdditiveSmoothing.h"
 
 void test_perplexity_complex(){
-    Array_list_ptr train_corpus = read_corpus("../train.txt");
-    Array_list_ptr test_corpus = read_corpus("../test.txt");
-    Array_list_ptr validation_corpus = read_corpus("../validation.txt");
+    Array_list_ptr train_corpus = read_corpus("train.txt");
+    Array_list_ptr test_corpus = read_corpus("test.txt");
+    Array_list_ptr validation_corpus = read_corpus("validation.txt");
     N_gram_ptr complex_uni_gram = create_string_n_gram(train_corpus, 1);
     N_gram_ptr complex_bi_gram = create_string_n_gram(train_corpus, 2);
     N_gram_ptr complex_tri_gram = create_string_n_gram(train_corpus, 3);

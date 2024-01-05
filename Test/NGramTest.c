@@ -80,9 +80,9 @@ void test_prune(){
 }
 
 void test_load_n_gram(){
-    N_gram_ptr n_gram_1 = create_string_n_gram3("../simple1.txt");
-    N_gram_ptr n_gram_2 = create_string_n_gram3("../simple2.txt");
-    N_gram_ptr n_gram_3 = create_string_n_gram3("../simple3.txt");
+    N_gram_ptr n_gram_1 = create_string_n_gram3("simple1.txt");
+    N_gram_ptr n_gram_2 = create_string_n_gram3("simple2.txt");
+    N_gram_ptr n_gram_3 = create_string_n_gram3("simple3.txt");
     check_n_gram(n_gram_1, (char*[]){"<s>"}, 1, 5, 1);
     check_n_gram(n_gram_1, (char*[]){"at"}, 1, 4, 2);
     check_n_gram(n_gram_1, (char*[]){"mehmet"}, 1, 2, 3);
@@ -98,18 +98,18 @@ void test_load_n_gram(){
 }
 
 void test_merge(){
-    N_gram_ptr n_gram_1 = create_string_n_gram3("../simple1a.txt");
-    N_gram_ptr n_gram_b = create_string_n_gram3("../simple1b.txt");
+    N_gram_ptr n_gram_1 = create_string_n_gram3("simple1a.txt");
+    N_gram_ptr n_gram_b = create_string_n_gram3("simple1b.txt");
     merge(n_gram_1, n_gram_b);
     if (vocabulary_size(n_gram_1) != 18){
         printf("Error in merge 1 %d\n", vocabulary_size(n_gram_1));
     }
     free_n_gram(n_gram_b);
     free_n_gram(n_gram_1);
-    N_gram_ptr n_gram_2 = create_string_n_gram3("../simple2a.txt");
-    n_gram_b = create_string_n_gram3("../simple2b.txt");
-    N_gram_ptr n_gram_c = create_string_n_gram3("../simple2c.txt");
-    N_gram_ptr n_gram_d = create_string_n_gram3("../simple2d.txt");
+    N_gram_ptr n_gram_2 = create_string_n_gram3("simple2a.txt");
+    n_gram_b = create_string_n_gram3("simple2b.txt");
+    N_gram_ptr n_gram_c = create_string_n_gram3("simple2c.txt");
+    N_gram_ptr n_gram_d = create_string_n_gram3("simple2d.txt");
     merge(n_gram_2, n_gram_b);
     merge(n_gram_2, n_gram_c);
     merge(n_gram_2, n_gram_d);
@@ -120,9 +120,9 @@ void test_merge(){
     free_n_gram(n_gram_c);
     free_n_gram(n_gram_d);
     free_n_gram(n_gram_2);
-    N_gram_ptr n_gram_3 = create_string_n_gram3("../simple3a.txt");
-    n_gram_b = create_string_n_gram3("../simple3b.txt");
-    n_gram_c = create_string_n_gram3("../simple3c.txt");
+    N_gram_ptr n_gram_3 = create_string_n_gram3("simple3a.txt");
+    n_gram_b = create_string_n_gram3("simple3b.txt");
+    n_gram_c = create_string_n_gram3("simple3c.txt");
     merge(n_gram_3, n_gram_b);
     merge(n_gram_3, n_gram_c);
     if (vocabulary_size(n_gram_3) != 20){
@@ -134,7 +134,7 @@ void test_merge(){
 }
 
 void test_get_count_complex() {
-    Array_list_ptr train_corpus = read_corpus("../train.txt");
+    Array_list_ptr train_corpus = read_corpus("train.txt");
     N_gram_ptr complex_uni_gram = create_string_n_gram(train_corpus, 1);
     N_gram_ptr complex_bi_gram = create_string_n_gram(train_corpus, 2);
     N_gram_ptr complex_tri_gram = create_string_n_gram(train_corpus, 3);
@@ -151,21 +151,21 @@ void test_get_count_complex() {
 }
 
 void test_vocabulary_size_complex() {
-    Array_list_ptr train_corpus = read_corpus("../train.txt");
+    Array_list_ptr train_corpus = read_corpus("train.txt");
     N_gram_ptr complex_uni_gram1 = create_string_n_gram(train_corpus, 1);
     if (vocabulary_size(complex_uni_gram1) != 57625){
         printf("Error in complex vocabulary size 1\n");
     }
     free_2d_array_list(train_corpus, free_);
     free_n_gram(complex_uni_gram1);
-    Array_list_ptr test_corpus = read_corpus("../test.txt");
+    Array_list_ptr test_corpus = read_corpus("test.txt");
     N_gram_ptr complex_uni_gram2 = create_string_n_gram(test_corpus, 1);
     if (vocabulary_size(complex_uni_gram2) != 55485){
         printf("Error in complex vocabulary size 2\n");
     }
     free_2d_array_list(test_corpus, free_);
     free_n_gram(complex_uni_gram2);
-    Array_list_ptr validation_corpus = read_corpus("../validation.txt");
+    Array_list_ptr validation_corpus = read_corpus("validation.txt");
     N_gram_ptr complex_uni_gram3 = create_string_n_gram(validation_corpus, 1);
     if (vocabulary_size(complex_uni_gram3) != 35663){
         printf("Error in complex vocabulary size 3\n");
@@ -175,9 +175,9 @@ void test_vocabulary_size_complex() {
 }
 
 void test_load_multi_part(){
-    N_gram_ptr simple_uni_gram = create_string_n_gram5(2, "../simple1part1.txt", "../simple1part2.txt");
-    N_gram_ptr simple_bi_gram = create_string_n_gram5(3, "../simple2part1.txt", "../simple2part2.txt", "../simple2part3.txt");
-    N_gram_ptr simple_tri_gram = create_string_n_gram5(4, "../simple3part1.txt", "../simple3part2.txt", "../simple3part3.txt", "../simple3part4.txt");
+    N_gram_ptr simple_uni_gram = create_string_n_gram5(2, "simple1part1.txt", "simple1part2.txt");
+    N_gram_ptr simple_bi_gram = create_string_n_gram5(3, "simple2part1.txt", "simple2part2.txt", "simple2part3.txt");
+    N_gram_ptr simple_tri_gram = create_string_n_gram5(4, "simple3part1.txt", "simple3part2.txt", "simple3part3.txt", "simple3part4.txt");
     if (vocabulary_size(simple_uni_gram) != 15){
         printf("Error in vocabulary size\n");
     }

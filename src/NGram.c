@@ -10,7 +10,7 @@
 #include "NGram.h"
 
 /**
- * Constructor of NGram class which takes a {@link vector<vector<Symbol>>} corpus and Integer size of ngram as input.
+ * Constructor of NGram class which takes an array list of corpus and Integer size of ngram as input.
  * It adds all sentences of corpus as ngrams.
  *
  * @param corpus {@link vector<vector<Symbol>>} list of sentences whose ngrams are added.
@@ -28,6 +28,10 @@ N_gram_ptr create_n_gram(Array_list_ptr corpus,
     return result;
 }
 
+/**
+ * Deallocates memory allocated for N-Gram.
+ * @param n_gram N-Gram
+ */
 void free_n_gram(N_gram_ptr n_gram) {
     free_n_gram_node(n_gram->root_node);
     free_(n_gram->probability_of_unseen);
@@ -36,9 +40,11 @@ void free_n_gram(N_gram_ptr n_gram) {
 }
 
 /**
- * Constructor of NGram class which takes Integer size of ngram.
+ * Constructor of NGram class which takes size of ngram.
  *
  * @param N size of ngram.
+ * @param hash_function Hash function that hashes the data in the N-Gram.
+ * @param key_compare Comparison function that compares the data.
  */
 N_gram_ptr create_n_gram2(int N, unsigned int (*hash_function)(const void *, int),
                           int (*key_compare)(const void *, const void *)) {
@@ -84,6 +90,11 @@ void add_n_gram_sentence(N_gram_ptr n_gram,
     }
 }
 
+/**
+ * Reads the header of the N-Gram input file.
+ * @param n_gram N-Gram to be read.
+ * @param input_file Input file.
+ */
 void load_n_gram(N_gram_ptr n_gram, FILE *input_file) {
     int vocabulary_size;
     char line[MAX_LINE_LENGTH];
@@ -100,6 +111,13 @@ void load_n_gram(N_gram_ptr n_gram, FILE *input_file) {
     }
 }
 
+/**
+ * Creates a generic N-Gram for a file with the given file name.
+ * @param file_name File name of the N-Gram
+ * @param hash_function Hash function that hashes the data in the N-Gram.
+ * @param key_compare Comparison function that compares the data.
+ * @return Constructed N-Gram.
+ */
 N_gram_ptr create_n_gram3(char *file_name, unsigned int (*hash_function)(const void *, int),
                           int (*key_compare)(const void *, const void *)) {
     FILE* input_file = fopen(file_name, "r");
@@ -111,6 +129,13 @@ N_gram_ptr create_n_gram3(char *file_name, unsigned int (*hash_function)(const v
     return result;
 }
 
+/**
+ * Creates a generic N-Gram for a given file.
+ * @param input_file File of the N-Gram
+ * @param hash_function Hash function that hashes the data in the N-Gram.
+ * @param key_compare Comparison function that compares the data.
+ * @return Constructed N-Gram.
+ */
 N_gram_ptr create_n_gram4(FILE *input_file, unsigned int (*hash_function)(const void *, int),
                           int (*key_compare)(const void *, const void *)) {
     N_gram_ptr result = malloc_(sizeof(N_gram), "create_n_gram4");
@@ -120,6 +145,13 @@ N_gram_ptr create_n_gram4(FILE *input_file, unsigned int (*hash_function)(const 
     return result;
 }
 
+/**
+ * Creates a generic N-Gram for a multipart file system.
+ * @param hash_function Hash function that hashes the data in the N-Gram.
+ * @param key_compare Comparison function that compares the data.
+ * @param num Number of files in the multipart file system.
+ * @return Constructed N-Gram.
+ */
 N_gram_ptr create_n_gram5(unsigned int (*hash_function)(const void *, int),
                           int (*key_compare)(const void *, const void *),
                           int num,
@@ -451,12 +483,22 @@ void set_adjusted_probability(N_gram_ptr n_gram, double *countsOfCounts, int hei
     n_gram->probability_of_unseen[height - 1] = 1.0 / (vocabulary_size(n_gram) + 1);
 }
 
+/**
+ * Prunes NGram according to the given threshold. All nodes having a probability less than the threshold will be
+ * pruned.
+ * @param threshold Probability threshold used for pruning.
+ */
 void prune(N_gram_ptr n_gram, double threshold) {
     if (threshold > 0.0 && threshold <= 1.0){
         prune_node(n_gram->root_node, threshold, n_gram->N - 1);
     }
 }
 
+/**
+ * Merges current NGram with the given NGram. If N of the two NGram's are not same, it does not
+ * merge. Merges first the vocabulary, then the NGram trees.
+ * @param toBeMerged NGram to be merged with.
+ */
 void merge(N_gram_ptr n_gram, const N_gram* toBeMerged) {
     if (n_gram->N != toBeMerged->N){
         return;
@@ -484,21 +526,41 @@ N_gram_ptr create_string_n_gram(Array_list_ptr corpus, int N) {
                          (int (*)(const void *, const void *)) compare_string);
 }
 
+/**
+ * Constructor of NGram class which takes size of ngram.
+ *
+ * @param N size of ngram.
+ */
 N_gram_ptr create_string_n_gram2(int N) {
     return create_n_gram2(N, (unsigned int (*)(const void *, int)) hash_function_string,
                           (int (*)(const void *, const void *)) compare_string);
 }
 
+/**
+ * Creates a string N-Gram for a file with the given file name.
+ * @param file_name File name of the N-Gram
+ * @return Constructed N-Gram.
+ */
 N_gram_ptr create_string_n_gram3(char *file_name) {
     return create_n_gram3(file_name, (unsigned int (*)(const void *, int)) hash_function_string,
                           (int (*)(const void *, const void *)) compare_string);
 }
 
+/**
+ * Creates a generic N-Gram for a given file.
+ * @param input_file File of the N-Gram
+ * @return Constructed N-Gram.
+ */
 N_gram_ptr create_string_n_gram4(FILE *input_file) {
     return create_n_gram4(input_file, (unsigned int (*)(const void *, int)) hash_function_string,
                           (int (*)(const void *, const void *)) compare_string);
 }
 
+/**
+ * Creates a generic N-Gram for a multipart file system.
+ * @param num Number of files in the multipart file system.
+ * @return Constructed N-Gram.
+ */
 N_gram_ptr create_string_n_gram5(int num, ...) {
     N_gram_ptr result = malloc_(sizeof(N_gram), "create_string_n_gram5");
     result->vocabulary = create_hash_set((unsigned int (*)(const void *, int)) hash_function_string, (int (*)(const void *, const void *)) compare_string);

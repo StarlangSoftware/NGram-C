@@ -31,6 +31,11 @@ N_gram_node_ptr create_n_gram_node(void *symbol,
     return result;
 }
 
+/**
+ * Clones the NGramNode.
+ * @param n_gram_node NGramNode to be cloned.
+ * @return Cloned NGramNode.
+ */
 N_gram_node_ptr clone_n_gram_node(const N_gram_node *n_gram_node) {
     N_gram_node_ptr result = malloc_(sizeof(N_gram_node), "clone_n_gram_node");
     if (n_gram_node->symbol != NULL){
@@ -54,6 +59,10 @@ N_gram_node_ptr clone_n_gram_node(const N_gram_node *n_gram_node) {
     return result;
 }
 
+/**
+ * Frees memory allocated to NGramNode.
+ * @param n_gram_node NGramNode to be destroyed.
+ */
 void free_n_gram_node(N_gram_node_ptr n_gram_node) {
     free_hash_map(n_gram_node->children, (void (*)(void *)) free_n_gram_node);
     free_(n_gram_node->symbol);
@@ -61,10 +70,12 @@ void free_n_gram_node(N_gram_node_ptr n_gram_node) {
 }
 
 /**
- * Constructor of NGramNode
+ * Constructor of NGramNode for an input file.
  *
  * @param is_root_node True if this node is root node, false otherwise.
  * @param input_file         File to be read.
+ * @param hash_function Hash function that hashes the data in the N-Gram.
+ * @param key_compare Comparison function that compares the data.
  */
 N_gram_node_ptr create_n_gram_node2(bool is_root_node,
                                     FILE *input_file,
@@ -98,10 +109,12 @@ N_gram_node_ptr create_n_gram_node2(bool is_root_node,
 }
 
 /**
- * Constructor of NGramNode
+ * Constructor of a generic NGramNode for a multipart file system.
  *
  * @param is_root_node True if this node is root node, false otherwise.
  * @param multiple_file Multiple file structure to read the nGram.
+ * @param hash_function Hash function that hashes the data in the N-Gram.
+ * @param key_compare Comparison function that compares the data.
  */
 N_gram_node_ptr create_n_gram_node3(bool is_root_node, Multiple_file_ptr multiple_file,
                                     unsigned int (*hash_function)(const void *, int),
@@ -133,6 +146,12 @@ N_gram_node_ptr create_n_gram_node3(bool is_root_node, Multiple_file_ptr multipl
     return result;
 }
 
+/**
+ * Constructor of a generic NGramNode.
+ *
+ * @param hash_function Hash function that hashes the data in the N-Gram.
+ * @param key_compare Comparison function that compares the data.
+ */
 N_gram_node_ptr
 create_n_gram_node4(unsigned int (*hash_function)(const void *, int), int (*key_compare)(const void *, const void *)) {
     return create_n_gram_node(NULL, hash_function, key_compare);
@@ -171,7 +190,7 @@ int maximum_occurrence_node(const N_gram_node* n_gram_node, int height) {
 }
 
 /**
- *
+ * Returns sum of counts of children counts.
  * @return sum of counts of children nodes.
  */
 double child_sum(const N_gram_node* n_gram_node) {
@@ -355,6 +374,14 @@ double get_bi_gram_probability_node(const N_gram_node* n_gram_node, const void *
     }
 }
 
+/**
+ * Gets trigram probability of given symbols w1, w2 and w3.
+ *
+ * @param w1 first gram of trigram
+ * @param w2 second gram of trigram
+ * @param w3 third gram of trigram
+ * @return probability of given trigram.
+ */
 double get_tri_gram_probability_node(const N_gram_node* n_gram_node, const void *w1, const void *w2, const void *w3) {
     if (hash_map_contains(n_gram_node->children, w1)){
         N_gram_node_ptr child = hash_map_get(n_gram_node->children, w1);
@@ -449,6 +476,12 @@ int get_count_node(const N_gram_node* n_gram_node, void **s, int length, int ind
     }
 }
 
+/**
+ * Prunes the NGramNode according to the given threshold. Removes the child(ren) whose probability is less than the
+ * threshold.
+ * @param threshold Threshold for pruning the NGram tree.
+ * @param N N in N-Gram.
+ */
 void prune_node(N_gram_node_ptr n_gram_node, double threshold, int N) {
     if (N == 0){
         void* maxElement = NULL;
@@ -484,6 +517,10 @@ void prune_node(N_gram_node_ptr n_gram_node, double threshold, int N) {
     }
 }
 
+/**
+ * Merges this NGramNode with the corresponding NGramNode in another NGram.
+ * @param toBeMerged Parallel NGramNode of the parallel NGram tree.
+ */
 void merge_node(N_gram_node_ptr n_gram_node, const N_gram_node* toBeMerged) {
     Array_list_ptr children = key_list(n_gram_node->children);
     for (int i = 0; i < children->size; i++){

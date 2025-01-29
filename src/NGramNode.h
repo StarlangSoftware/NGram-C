@@ -24,7 +24,7 @@ typedef struct n_gram_node N_gram_node;
 
 typedef N_gram_node *N_gram_node_ptr;
 
-N_gram_node_ptr create_n_gram_node(void* symbol,
+N_gram_node_ptr create_n_gram_node(const void* symbol,
                                    unsigned int (*hash_function)(const void *, int),
                                    int (*key_compare)(const void *, const void *));
 

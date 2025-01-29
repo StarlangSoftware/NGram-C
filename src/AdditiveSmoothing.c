@@ -36,12 +36,13 @@ double* learn_parameters_additive_smoothing(Array_list_ptr corpus, int N) {
 
 /**
  * Wrapper function to set the N-gram probabilities with additive smoothing.
- * @param nGram N-Gram for which the probabilities will be set.
+ * @param n_gram N-Gram for which the probabilities will be set.
  * @param level Level for which N-Gram probabilities will be set. Probabilities for different levels of the
  *              N-gram can be set with this function. If level = 1, N-Gram is treated as UniGram, if level = 2,
  *              N-Gram is treated as Bigram, etc.
+ * @param parameters Parameters of the ngram model.
  */
-void set_probabilities_with_level_additive_smoothing(N_gram_ptr n_gram, int level, double* parameters) {
+void set_probabilities_with_level_additive_smoothing(N_gram_ptr n_gram, int level, const double* parameters) {
     set_probability_with_pseudo_count(n_gram, *parameters, level);
 }
 

@@ -34,11 +34,11 @@ N_gram_ptr create_n_gram2(int N,
 
 N_gram_ptr create_string_n_gram2(int N);
 
-N_gram_ptr create_n_gram3(char* file_name,
+N_gram_ptr create_n_gram3(const char* file_name,
                           unsigned int (*hash_function)(const void *, int),
                           int (*key_compare)(const void *, const void *));
 
-N_gram_ptr create_string_n_gram3(char* file_name);
+N_gram_ptr create_string_n_gram3(const char* file_name);
 
 N_gram_ptr create_n_gram4(FILE* input_file,
                           unsigned int (*hash_function)(const void *, int),

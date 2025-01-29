@@ -7,10 +7,11 @@
 /**
  * Wrapper function to set the N-gram probabilities with laplace smoothing.
  *
- * @param nGram N-Gram for which the probabilities will be set.
+ * @param n_gram N-Gram for which the probabilities will be set.
  * @param level Level for which N-Gram probabilities will be set. Probabilities for different levels of the
  *              N-gram can be set with this function. If level = 1, N-Gram is treated as UniGram, if level = 2,
  *              N-Gram is treated as Bigram, etc.
+ * @param data used to calculate n gram probabilities.
  */
 void set_probabilities_with_level_laplace_smoothing(N_gram_ptr n_gram,
                                                     int level,

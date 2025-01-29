@@ -73,8 +73,7 @@ void add_n_gram(N_gram_ptr n_gram, Array_list_ptr symbols, int size) {
  * Adds given sentence count times to {@link unordered_set} the vocabulary and create and add ngrams of the sentence to NGramNode the rootNode
  *
  * @param symbols {@link Symbol*} sentence whose ngrams are added.
- * @param size size of symbols.
- * @param count Number of times this sentence is added.
+ * @param sentence_count Number of times this sentence is added.
  */
 void add_n_gram_sentence(N_gram_ptr n_gram,
                          Array_list_ptr symbols,
@@ -118,7 +117,7 @@ void load_n_gram(N_gram_ptr n_gram, FILE *input_file) {
  * @param key_compare Comparison function that compares the data.
  * @return Constructed N-Gram.
  */
-N_gram_ptr create_n_gram3(char *file_name, unsigned int (*hash_function)(const void *, int),
+N_gram_ptr create_n_gram3(const char *file_name, unsigned int (*hash_function)(const void *, int),
                           int (*key_compare)(const void *, const void *)) {
     FILE* input_file = fopen(file_name, "r");
     N_gram_ptr result = malloc_(sizeof(N_gram), "create_n_gram3");
@@ -181,7 +180,8 @@ int vocabulary_size(const N_gram *n_gram) {
  *
  * ie. _lambda1 * bigramProbability + (1 - _lambda1) * unigramProbability
  *
- * @param _lambda1 interpolation ratio for bigram probabilities
+ * @param n_gram N gram
+ * @param lambda1 interpolation ratio for bigram probabilities
  */
 void set_lambda1(N_gram_ptr n_gram, double lambda1) {
     if (n_gram->N == 2){
@@ -194,8 +194,9 @@ void set_lambda1(N_gram_ptr n_gram, double lambda1) {
  * Sets lambdas, interpolation ratios, for trigram, bigram and unigram probabilities.
  * ie. _lambda1 * trigramProbability + _lambda2 * bigramProbability  + (1 - _lambda1 - _lambda2) * unigramProbability
  *
- * @param _lambda1 interpolation ratio for trigram probabilities
- * @param _lambda2 interpolation ratio for bigram probabilities
+ * @param n_gram N gram
+ * @param lambda1 interpolation ratio for trigram probabilities
+ * @param lambda2 interpolation ratio for bigram probabilities
  */
 void set_lambda2(N_gram_ptr n_gram, double lambda1, double lambda2) {
     if (n_gram->N == 2){
@@ -207,7 +208,8 @@ void set_lambda2(N_gram_ptr n_gram, double lambda1, double lambda2) {
 
 /**
  * Sets probabilities by adding pseudocounts given height and pseudocount.
- * @param pseudoCount pseudocount added to all N-Grams.
+ * @param n_gram N gram
+ * @param pseudo_count pseudocount added to all N-Grams.
  * @param height  height for N-Gram. If height= 1, N-Gram is treated as UniGram, if height = 2,
  *                N-Gram is treated as Bigram, etc.
  */
@@ -231,6 +233,7 @@ void set_probability_with_pseudo_count(N_gram_ptr n_gram,
 /**
  * Replaces words not in {@link unordered_set} given dictionary.
  *
+ * @param n_gram N gram
  * @param dictionary dictionary of known words.
  */
 void replace_unknown_words(N_gram_ptr n_gram, Hash_set_ptr dictionary) {
@@ -240,6 +243,7 @@ void replace_unknown_words(N_gram_ptr n_gram, Hash_set_ptr dictionary) {
 /**
  * Constructs a dictionary of nonrare words with given N-Gram level and probability threshold.
  *
+ * @param n_gram N gram
  * @param level Level for counting words. Counts for different levels of the N-Gram can be set. If level = 1, N-Gram is
  * treated as UniGram, if level = 2, N-Gram is treated as Bigram, etc.
  * @param probability probability threshold for nonrare words.
@@ -262,8 +266,10 @@ Hash_set_ptr construct_dictionary_with_non_rare_words(N_gram_ptr n_gram, int lev
 
 /**
  * Calculates counts of counts of NGrams.
+ * @param n_gram N gram
  * @param height  height for NGram. If height = 1, N-Gram is treated as UniGram, if height = 2,
  *                N-Gram is treated as Bigram, etc.
+ *                @param size Size of the resulting array
  * @return counts of counts of NGrams.
  */
 int *calculate_counts_of_counts(const N_gram *n_gram, int height, int* size) {
@@ -275,6 +281,7 @@ int *calculate_counts_of_counts(const N_gram *n_gram, int height, int* size) {
 
 /**
  * Find maximum occurrence in given height.
+ * @param n_gram N gram
  * @param height height for occurrences. If height = 1, N-Gram is treated as UniGram, if height = 2,
  *               N-Gram is treated as Bigram, etc.
  * @return maximum occurrence in given height.
@@ -285,7 +292,8 @@ int maximum_occurrence(const N_gram* n_gram, int height) {
 
 /**
  * Update counts of counts of N-Grams with given counts of counts and given height.
- * @param countsOfCounts updated counts of counts.
+ * @param n_gram N gram
+ * @param counts_of_counts updated counts of counts.
  * @param height  height for NGram. If height = 1, N-Gram is treated as UniGram, if height = 2,
  *                N-Gram is treated as Bigram, etc.
  */
@@ -296,6 +304,7 @@ void update_counts_of_counts(const N_gram* n_gram, int *counts_of_counts, int he
 /**
  * Calculates the perplexity of given corpus depending on N-Gram model (unigram, bigram, trigram, etc.)
  *
+ * @param n_gram N gram
  * @param corpus corpus whose perplexity is calculated.
  * @return perplexity of given corpus
  */
@@ -316,6 +325,7 @@ double get_perplexity(const N_gram* n_gram, const Array_list* corpus) {
  * Calculates unigram perplexity of given corpus. First sums negative log likelihoods of all unigrams in corpus.
  * Then returns exp of average negative log likelihood.
  *
+ * @param n_gram N gram
  * @param corpus corpus whose unigram perplexity is calculated.
  *
  * @return unigram perplexity of corpus.
@@ -338,6 +348,7 @@ double get_uni_gram_perplexity(const N_gram * n_gram, const Array_list* corpus) 
  * Calculates bigram perplexity of given corpus. First sums negative log likelihoods of all bigrams in corpus.
  * Then returns exp of average negative log likelihood.
  *
+ * @param n_gram N gram
  * @param corpus corpus whose bigram perplexity is calculated.
  *
  * @return bigram perplexity of given corpus.
@@ -360,6 +371,7 @@ double get_bi_gram_perplexity(const N_gram * n_gram, const Array_list* corpus) {
  * Calculates trigram perplexity of given corpus. First sums negative log likelihoods of all trigrams in corpus.
  * Then returns exp of average negative log likelihood.
  *
+ * @param n_gram N gram
  * @param corpus corpus whose trigram perplexity is calculated.
  * @return trigram perplexity of given corpus.
  */
@@ -381,7 +393,8 @@ double get_tri_gram_perplexity(const N_gram* n_gram, const Array_list* corpus) {
  * Gets probability of sequence of symbols depending on N in N-Gram. If N is 1, returns unigram probability.
  * If N is 2, if interpolated is true, then returns interpolated bigram and unigram probability, otherwise returns only bigram probability.
  * If N is 3, if interpolated is true, then returns interpolated trigram, bigram and unigram probability, otherwise returns only trigram probability.
- * @param symbols sequence of symbol.
+ * @param n_gram N gram
+ * @param num sequence of symbol.
  * @return probability of given sequence.
  */
 double get_probability(const N_gram* n_gram, int num, ...) {
@@ -426,6 +439,7 @@ double get_probability(const N_gram* n_gram, int num, ...) {
 
 /**
  * Gets unigram probability of given symbol.
+ * @param n_gram N gram
  * @param w1 a unigram symbol.
  * @return probability of given unigram.
  */
@@ -435,6 +449,7 @@ double get_uni_gram_probability(const N_gram* n_gram, const void *w1) {
 
 /**
  * Gets bigram probability of given symbols.
+ * @param n_gram N gram
  * @param w1 first gram of bigram
  * @param w2 second gram of bigram
  * @return probability of bigram formed by w1 and w2.
@@ -449,6 +464,7 @@ double get_bi_gram_probability(const N_gram* n_gram, const void *w1, const void 
 
 /**
  * Gets trigram probability of given symbols.
+ * @param n_gram N gram
  * @param w1 first gram of trigram
  * @param w2 second gram of trigram
  * @param w3 third gram of trigram
@@ -464,7 +480,9 @@ double get_tri_gram_probability(const N_gram* n_gram, const void *w1, const void
 
 /**
  * Gets count of given sequence of symbol.
+ * @param n_gram N gram
  * @param symbols sequence of symbol.
+ * @param length Length of the symbols array
  * @return count of symbols.
  */
 int get_count(const N_gram * n_gram, void **symbols, int length) {
@@ -473,6 +491,7 @@ int get_count(const N_gram * n_gram, void **symbols, int length) {
 
 /**
  * Sets probability with given counts of counts and pZero.
+ * @param n_gram N gram
  * @param countsOfCounts counts of counts of NGrams.
  * @param height  height for NGram. If height = 1, N-Gram is treated as UniGram, if height = 2,
  *                N-Gram is treated as Bigram, etc.
@@ -486,6 +505,7 @@ void set_adjusted_probability(N_gram_ptr n_gram, double *countsOfCounts, int hei
 /**
  * Prunes NGram according to the given threshold. All nodes having a probability less than the threshold will be
  * pruned.
+ * @param n_gram N gram
  * @param threshold Probability threshold used for pruning.
  */
 void prune(N_gram_ptr n_gram, double threshold) {
@@ -497,6 +517,7 @@ void prune(N_gram_ptr n_gram, double threshold) {
 /**
  * Merges current NGram with the given NGram. If N of the two NGram's are not same, it does not
  * merge. Merges first the vocabulary, then the NGram trees.
+ * @param n_gram N gram
  * @param toBeMerged NGram to be merged with.
  */
 void merge(N_gram_ptr n_gram, const N_gram* toBeMerged) {
@@ -541,7 +562,7 @@ N_gram_ptr create_string_n_gram2(int N) {
  * @param file_name File name of the N-Gram
  * @return Constructed N-Gram.
  */
-N_gram_ptr create_string_n_gram3(char *file_name) {
+N_gram_ptr create_string_n_gram3(const char *file_name) {
     return create_n_gram3(file_name, (unsigned int (*)(const void *, int)) hash_function_string,
                           (int (*)(const void *, const void *)) compare_string);
 }

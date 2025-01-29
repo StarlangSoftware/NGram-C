@@ -10,7 +10,7 @@
  * @param level Level for which N-Gram probabilities will be set. Probabilities for different levels of the
  *              N-gram can be set with this function. If level = 1, N-Gram is treated as UniGram, if level = 2,
  *              N-Gram is treated as Bigram, etc.
- *
+ * @param data Data to calculate probabilities
  */
 void set_probabilities_with_level_no_smoothing_with_dictionary(N_gram_ptr n_gram,
                                                                int level,

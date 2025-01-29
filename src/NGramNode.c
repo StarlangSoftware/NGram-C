@@ -14,7 +14,7 @@
  *
  * @param symbol symbol to be kept in this node.
  */
-N_gram_node_ptr create_n_gram_node(void *symbol,
+N_gram_node_ptr create_n_gram_node(const void *symbol,
                                    unsigned int (*hash_function)(const void *, int),
                                    int (*key_compare)(const void *, const void *)) {
     N_gram_node_ptr result = malloc_(sizeof(N_gram_node), "create_n_gram_node");
@@ -168,6 +168,7 @@ int size_of_n_gram_node(const N_gram_node* n_gram_node) {
 /**
  * Finds maximum occurrence. If height is 0, returns the count of this node.
  * Otherwise, traverses this nodes' children recursively and returns maximum occurrence.
+ * @param n_gram_node N gram tree node
  * @param height height for NGram.
  * @return maximum occurrence.
  */
@@ -209,6 +210,7 @@ double child_sum(const N_gram_node* n_gram_node) {
 
 /**
  * Traverses nodes and updates counts of counts for each node.
+ * @param n_gram_node N gram tree node
  * @param counts_of_counts counts of counts of NGrams.
  * @param height height for NGram. if height = 1, If level = 1, N-Gram is treated as UniGram, if level = 2,
  *               N-Gram is treated as Bigram, etc.
@@ -228,6 +230,7 @@ void update_counts_of_counts_node(const N_gram_node* n_gram_node, int *counts_of
 
 /**
  * Sets probabilities by traversing nodes and adding pseudocount for each NGram.
+ * @param n_gram_node N gram tree node
  * @param pseudo_count pseudocount added to each NGram.
  * @param height height for NGram. if height = 1, If level = 1, N-Gram is treated as UniGram, if level = 2,
  *               N-Gram is treated as Bigram, etc.
@@ -264,6 +267,7 @@ void set_node_probability_with_pseudo_count(N_gram_node_ptr n_gram_node,
  * For count < 5, count is considered as ((r + 1) * N[r + 1]) / N[r]), otherwise, count is considered as it is.
  * Sum of children counts are computed. Then, probability of a child node is (1 - p_zero) * (r / sum) if r > 5
  * otherwise, r is replaced with ((r + 1) * N[r + 1]) / N[r]) and calculated the same.
+ * @param n_gram_node N gram tree node
  * @param N counts of counts of NGrams.
  * @param height height for NGram. if height = 1, If level = 1, N-Gram is treated as UniGram, if level = 2,
  *               N-Gram is treated as Bigram, etc.
@@ -314,10 +318,12 @@ void set_adjusted_probability_node(N_gram_node_ptr n_gram_node,
 
 /**
  * Adds NGram given as array of symbols to the node as a child.
+ * @param n_gram_node N gram tree node
  * @param s array of symbols
  * @param index  start index of NGram
  * @param height height for NGram. if height = 1, If level = 1, N-Gram is treated as UniGram, if level = 2,
  *               N-Gram is treated as Bigram, etc.
+ * @param sentence_count Number of sentences in s.
  */
 void add_n_gram_to_node(N_gram_node_ptr n_gram_node,
                         Array_list_ptr s,
@@ -341,6 +347,7 @@ void add_n_gram_to_node(N_gram_node_ptr n_gram_node,
 
 /**
  * Gets unigram probability of given symbol.
+ * @param n_gram_node N gram tree node
  * @param w1 unigram.
  * @return unigram probability of given symbol.
  */
@@ -358,6 +365,7 @@ double get_uni_gram_probability_node(const N_gram_node* n_gram_node, const void 
 
 /**
  * Gets bigram probability of given symbols w1 and w2
+ * @param n_gram_node N gram tree node
  * @param w1 first gram of bigram.
  * @param w2 second gram of bigram.
  * @return probability of given bigram or -1 if unseen case
@@ -377,6 +385,7 @@ double get_bi_gram_probability_node(const N_gram_node* n_gram_node, const void *
 /**
  * Gets trigram probability of given symbols w1, w2 and w3.
  *
+ * @param n_gram_node N gram tree node
  * @param w1 first gram of trigram
  * @param w2 second gram of trigram
  * @param w3 third gram of trigram
@@ -396,7 +405,8 @@ double get_tri_gram_probability_node(const N_gram_node* n_gram_node, const void 
 
 /**
  * Counts words recursively given height and wordCounter.
- * @param wordCounter word counter keeping symbols and their counts.
+ * @param n_gram_node N gram tree node
+ * @param word_counter word counter keeping symbols and their counts.
  * @param height height for NGram. if height = 1, If level = 1, N-Gram is treated as UniGram, if level = 2,
  *               N-Gram is treated as Bigram, etc.
  */
@@ -415,8 +425,9 @@ void count_words(const N_gram_node* n_gram_node, Counter_hash_map_ptr word_count
 
 /**
  * Replace words not in given dictionary.
- * Deletes unknown words from children nodes and adds them to {@link NGramNode#unknown} unknown node as children recursively.
+ * Deletes unknown words from children nodes and adds them to unknown node as children recursively.
  *
+ * @param n_gram_node N gram tree node
  * @param dictionary dictionary of known words.
  */
 void replace_unknown_words_node(N_gram_node_ptr n_gram_node, Hash_set_ptr dictionary) {
@@ -459,7 +470,9 @@ void replace_unknown_words_node(N_gram_node_ptr n_gram_node, Hash_set_ptr dictio
 
 /**
  * Gets count of symbol given array of symbols and index of symbol in this array.
+ * @param n_gram_node N gram tree node
  * @param s array of symbols
+ * @param length Length of the s array.
  * @param index index of symbol whose count is returned
  * @return count of the symbol.
  */
@@ -479,6 +492,7 @@ int get_count_node(const N_gram_node* n_gram_node, void **s, int length, int ind
 /**
  * Prunes the NGramNode according to the given threshold. Removes the child(ren) whose probability is less than the
  * threshold.
+ * @param n_gram_node N gram tree node
  * @param threshold Threshold for pruning the NGram tree.
  * @param N N in N-Gram.
  */
@@ -519,6 +533,7 @@ void prune_node(N_gram_node_ptr n_gram_node, double threshold, int N) {
 
 /**
  * Merges this NGramNode with the corresponding NGramNode in another NGram.
+ * @param n_gram_node N gram tree node
  * @param toBeMerged Parallel NGramNode of the parallel NGram tree.
  */
 void merge_node(N_gram_node_ptr n_gram_node, const N_gram_node* toBeMerged) {
@@ -544,6 +559,7 @@ void merge_node(N_gram_node_ptr n_gram_node, const N_gram_node* toBeMerged) {
 
 /**
  * Generates next string for given list of symbol and index
+ * @param n_gram_node N gram tree node
  * @param s list of symbol
  * @param index index index of generated string
  * @return generated string.

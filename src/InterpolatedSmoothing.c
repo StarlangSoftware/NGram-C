@@ -15,7 +15,7 @@
  *
  * @param nGrams 10 N-Grams learned for different folds of the corpus. nGrams[i] is the N-Gram trained with i'th train fold of the corpus.
  * @param kFoldCrossValidation Cross-validation data used in training and testing the N-grams.
- * @param lowerBound Initial lower bound for optimizing the best lambda.
+ * @param lower_bound Initial lower bound for optimizing the best lambda.
  * @return  Best lambda optimized with k-fold crossvalidation.
  */
 double *learn_best_lambda(Array_list_ptr nGrams,
@@ -154,11 +154,11 @@ double *learn_parameters_interpolated_smoothing(Array_list_ptr corpus, int N) {
 
 /**
  * Wrapper function to set the N-gram probabilities with interpolated smoothing.
- * @param nGram N-Gram for which the probabilities will be set.
+ * @param n_gram N-Gram for which the probabilities will be set.
  * @param level Level for which N-Gram probabilities will be set. Probabilities for different levels of the
  *              N-gram can be set with this function. If level = 1, N-Gram is treated as UniGram, if level = 2,
  *              N-Gram is treated as Bigram, etc.
- *
+ * @param parameters Parameters of the ngram model.
  */
 void set_probabilities_with_level_interpolated_smoothing(N_gram_ptr n_gram,
                                                          int level,

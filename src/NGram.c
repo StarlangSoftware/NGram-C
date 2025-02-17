@@ -535,7 +535,7 @@ void set_probabilities_simple(N_gram_ptr n_gram, void* data, void (*set_probabil
 void set_probabilities_trained(N_gram_ptr n_gram,
                                Array_list_ptr corpus,
                                double* (*learn_parameters)(Array_list_ptr, int),
-                               void (*set_probabilities_with_level)(N_gram_ptr, int, double*)) {
+                               void (*set_probabilities_with_level)(N_gram_ptr, int, const double*)) {
     double* parameters = learn_parameters(corpus, n_gram->N);
     set_probabilities_with_level(n_gram, n_gram->N, parameters);
     free_(parameters);

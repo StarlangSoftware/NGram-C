@@ -118,6 +118,6 @@ void set_probabilities_simple(N_gram_ptr n_gram,
 void set_probabilities_trained(N_gram_ptr n_gram,
                                Array_list_ptr corpus,
                                double* (*learn_parameters)(Array_list_ptr corpus, int N),
-                               void (*set_probabilities_with_level)(N_gram_ptr n_gram, int level, double* parameters));
+                               void (*set_probabilities_with_level)(N_gram_ptr n_gram, int level, const double* parameters));
 
 #endif //NGRAM_NGRAM_H

@@ -43,7 +43,7 @@ void set_probabilities_with_level_good_turing_smoothing(N_gram_ptr n_gram,
  */
 double *linear_regression_on_counts_of_counts(const int *counts_of_counts, int size) {
     int r_i_plus_1, r_i_minus_1;
-    double* N = malloc_(sizeof(double) * size, "linear_regression_on_counts_of_counts");
+    double* N = malloc_(sizeof(double) * size);
     Array_list_ptr r = create_array_list();
     Array_list_ptr c = create_array_list();
     double x_t, r_t;

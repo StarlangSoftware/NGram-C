@@ -59,6 +59,8 @@ void test_calculate_probabilities_simple(){
 }
 
 int main(){
+    start_large_memory_check();
     test_perplexity_simple();
     test_calculate_probabilities_simple();
+    end_memory_check();
 }

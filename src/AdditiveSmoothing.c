@@ -27,7 +27,7 @@ double* learn_parameters_additive_smoothing(Array_list_ptr corpus, int N) {
                                          (int (*)(const void *, const void *)) compare_string);
         array_list_add(n_grams, nGram);
     }
-    double* delta = malloc_(sizeof(double), "learn_parameters_additive_smoothing");
+    double* delta = malloc_(sizeof(double));
     *delta = learn_best_delta(n_grams, k_fold_cross_validation, 0.1);
     free_array_list(n_grams, (void (*)(void *)) free_n_gram);
     free_k_fold_cross_validation(k_fold_cross_validation);

@@ -48,9 +48,9 @@ void free_n_gram(N_gram_ptr n_gram) {
  */
 N_gram_ptr create_n_gram2(int N, unsigned int (*hash_function)(const void *, int),
                           int (*key_compare)(const void *, const void *)) {
-    N_gram_ptr result = malloc_(sizeof(N_gram), "create_n_gram2_1");
+    N_gram_ptr result = malloc_(sizeof(N_gram));
     result->N = N;
-    result->probability_of_unseen = calloc_(N, sizeof(double), "create_n_gram2_2");
+    result->probability_of_unseen = calloc_(N, sizeof(double));
     result->vocabulary = create_hash_set(hash_function, key_compare);
     result->root_node = create_n_gram_node(NULL, hash_function, key_compare);
     return result;
@@ -98,7 +98,7 @@ void load_n_gram(N_gram_ptr n_gram, FILE *input_file) {
     int vocabulary_size;
     char line[MAX_LINE_LENGTH];
     fscanf(input_file, "%d%lf%lf", &(n_gram->N), &(n_gram->lambda1), &(n_gram->lambda2));
-    n_gram->probability_of_unseen = malloc_(n_gram->N * sizeof(double), "load_n_gram");
+    n_gram->probability_of_unseen = malloc_(n_gram->N * sizeof(double));
     for (int i = 0; i < n_gram->N; i++){
         fscanf(input_file, "%lf", &(n_gram->probability_of_unseen[i]));
     }
@@ -120,7 +120,7 @@ void load_n_gram(N_gram_ptr n_gram, FILE *input_file) {
 N_gram_ptr create_n_gram3(const char *file_name, unsigned int (*hash_function)(const void *, int),
                           int (*key_compare)(const void *, const void *)) {
     FILE* input_file = fopen(file_name, "r");
-    N_gram_ptr result = malloc_(sizeof(N_gram), "create_n_gram3");
+    N_gram_ptr result = malloc_(sizeof(N_gram));
     result->vocabulary = create_hash_set(hash_function, key_compare);
     load_n_gram(result, input_file);
     result->root_node = create_n_gram_node2(true, input_file, hash_function, key_compare);
@@ -137,7 +137,7 @@ N_gram_ptr create_n_gram3(const char *file_name, unsigned int (*hash_function)(c
  */
 N_gram_ptr create_n_gram4(FILE *input_file, unsigned int (*hash_function)(const void *, int),
                           int (*key_compare)(const void *, const void *)) {
-    N_gram_ptr result = malloc_(sizeof(N_gram), "create_n_gram4");
+    N_gram_ptr result = malloc_(sizeof(N_gram));
     result->vocabulary = create_hash_set(hash_function, key_compare);
     load_n_gram(result, input_file);
     result->root_node = create_n_gram_node2(true, input_file, hash_function, key_compare);
@@ -155,7 +155,7 @@ N_gram_ptr create_n_gram5(unsigned int (*hash_function)(const void *, int),
                           int (*key_compare)(const void *, const void *),
                           int num,
                           ...) {
-    N_gram_ptr result = malloc_(sizeof(N_gram), "create_n_gram5");
+    N_gram_ptr result = malloc_(sizeof(N_gram));
     result->vocabulary = create_hash_set(hash_function, key_compare);
     va_list valist;
     va_start(valist, num);
@@ -274,7 +274,7 @@ Hash_set_ptr construct_dictionary_with_non_rare_words(N_gram_ptr n_gram, int lev
  */
 int *calculate_counts_of_counts(const N_gram *n_gram, int height, int* size) {
     *size = maximum_occurrence(n_gram, height) + 2;
-    int* counts_of_counts = calloc_(*size, sizeof(int), "calculate_counts_of_counts");
+    int* counts_of_counts = calloc_(*size, sizeof(int));
     update_counts_of_counts(n_gram, counts_of_counts, height);
     return counts_of_counts;
 }
@@ -583,7 +583,7 @@ N_gram_ptr create_string_n_gram4(FILE *input_file) {
  * @return Constructed N-Gram.
  */
 N_gram_ptr create_string_n_gram5(int num, ...) {
-    N_gram_ptr result = malloc_(sizeof(N_gram), "create_string_n_gram5");
+    N_gram_ptr result = malloc_(sizeof(N_gram));
     result->vocabulary = create_hash_set((unsigned int (*)(const void *, int)) hash_function_string, (int (*)(const void *, const void *)) compare_string);
     va_list valist;
     va_start(valist, num);

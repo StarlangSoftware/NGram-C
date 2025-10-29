@@ -17,7 +17,7 @@
 N_gram_node_ptr create_n_gram_node(const void *symbol,
                                    unsigned int (*hash_function)(const void *, int),
                                    int (*key_compare)(const void *, const void *)) {
-    N_gram_node_ptr result = malloc_(sizeof(N_gram_node), "create_n_gram_node");
+    N_gram_node_ptr result = malloc_(sizeof(N_gram_node));
     if (symbol != NULL){
         result->symbol = str_copy(result->symbol, symbol);
     } else {
@@ -37,7 +37,7 @@ N_gram_node_ptr create_n_gram_node(const void *symbol,
  * @return Cloned NGramNode.
  */
 N_gram_node_ptr clone_n_gram_node(const N_gram_node *n_gram_node) {
-    N_gram_node_ptr result = malloc_(sizeof(N_gram_node), "clone_n_gram_node");
+    N_gram_node_ptr result = malloc_(sizeof(N_gram_node));
     if (n_gram_node->symbol != NULL){
         result->symbol = str_copy(result->symbol, n_gram_node->symbol);
     } else {

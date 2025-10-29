@@ -17,11 +17,11 @@
  */
 Multiple_file_ptr create_multiple_file(int num, ...) {
     va_list valist;
-    Multiple_file_ptr result = malloc_(sizeof(Multiple_file), "create_multiple_file_1");
+    Multiple_file_ptr result = malloc_(sizeof(Multiple_file));
     result->index = 0;
     va_start(valist, num);
     result->count = num;
-    result->file_name_list = malloc_(num * sizeof(char*), "create_multiple_file_2");
+    result->file_name_list = malloc_(num * sizeof(char*));
     for (int i = 0; i < num; i++){
         char* tmp = va_arg(valist, char*);
         result->file_name_list[i] = str_copy(result->file_name_list[i], tmp);
@@ -91,10 +91,10 @@ void free_multiple_file(Multiple_file_ptr multiple_file) {
  * @param valist A list of files given as dynamic parameters.
  */
 Multiple_file_ptr create_multiple_file2(int num, va_list valist) {
-    Multiple_file_ptr result = malloc_(sizeof(Multiple_file), "create_multiple_file2_1");
+    Multiple_file_ptr result = malloc_(sizeof(Multiple_file));
     result->index = 0;
     result->count = num;
-    result->file_name_list = malloc_(num * sizeof(char*), "create_multiple_file2_2");
+    result->file_name_list = malloc_(num * sizeof(char*));
     for (int i = 0; i < num; i++){
         char* tmp = va_arg(valist, char*);
         result->file_name_list[i] = str_copy(result->file_name_list[i], tmp);
